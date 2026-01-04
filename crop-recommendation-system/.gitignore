@@ -1,0 +1,151 @@
+# Backend (Python)
+backend/venv/
+backend/env/
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/.Python
+backend/pip-log.txt
+backend/pip-delete-this-directory.txt
+backend/.tox/
+backend/.coverage
+backend/.coverage.*
+backend/.cache
+backend/nosetests.xml
+backend/coverage.xml
+backend/*.cover
+backend/.hypothesis/
+backend/.pytest_cache/
+backend/*.egg-info/
+backend/dist/
+backend/build/
+backend/.env
+backend/.env.local
+backend/.DS_Store
+backend/Thumbs.db
+
+# Backend - Generated model files (optional - can commit these)
+# backend/*.pkl
+# backend/crop_recommendation_model.pkl
+# backend/feature_scaler.pkl
+# backend/label_encoder.pkl
+
+# Frontend (Node.js)
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/build/
+frontend/dist/
+frontend/.DS_Store
+frontend/Thumbs.db
+frontend/.eslintcache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.iml
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Misc
+*.log
+*.pot
+*.mo
+*.sql
+*.sqlite
+*.db
+*.sqlite3
+*.sqlite-journal
+.cache
+.webassets-cache
+instance/
+.tmp/
+temp/
+tmp/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Environment
+.env*
+!.env.example
+.env.*.local
+
+# IDE Settings
+.vscode/settings.json
+.vscode/launch.json
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Virtual environments
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Testing
+.pytest_cache/
+.tox/
+.hypothesis/
+
+# Backup files
+*.bak
+*.backup
+*~
+*.orig
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
