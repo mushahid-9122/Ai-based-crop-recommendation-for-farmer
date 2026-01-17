@@ -1,1 +1,1 @@
-# Ai-based-crop-recommendation-for-farmer
+# Ai-based-crop-recommendation-system-for-farmer
