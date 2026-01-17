@@ -303,6 +303,79 @@ def get_stats():
             'error': f'Server error: {str(e)}'
         }), 500
 
+# Global variable to store latest sensor data
+latest_sensor_data = {}
+
+@app.route('/api/sensor-data', methods=['POST'])
+def receive_sensor_data():
+    """
+    Receive sensor data from IoT devices (Arduino/Raspberry Pi)
+
+    Request body:
+    {
+        "timestamp": "ISO format timestamp",
+        "soil_moisture": float,
+        "temperature": float,
+        "humidity": float,
+        "rain_value": float (optional)
+    }
+    """
+    try:
+        data = request.get_json()
+
+        # Validate required fields
+        required_fields = ['timestamp', 'soil_moisture', 'temperature', 'humidity']
+        if not all(field in data for field in required_fields):
+            return jsonify({
+                'success': False,
+                'error': 'Missing required fields: ' + ', '.join(required_fields)
+            }), 400
+
+        # Store the latest sensor data
+        global latest_sensor_data
+        latest_sensor_data = {
+            'timestamp': data['timestamp'],
+            'soil_moisture': float(data['soil_moisture']),
+            'temperature': float(data['temperature']),
+            'humidity': float(data['humidity']),
+            'rain_value': float(data.get('rain_value', 0))
+        }
+
+        print(f"[SENSOR DATA] Received: {latest_sensor_data}")
+
+        return jsonify({
+            'success': True,
+            'message': 'Sensor data received successfully'
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Server error: {str(e)}'
+        }), 500
+
+@app.route('/api/sensor-data', methods=['GET'])
+def get_sensor_data():
+    """Get the latest sensor data"""
+    try:
+        global latest_sensor_data
+        if not latest_sensor_data:
+            return jsonify({
+                'success': False,
+                'error': 'No sensor data available'
+            }), 404
+
+        return jsonify({
+            'success': True,
+            'data': latest_sensor_data
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Server error: {str(e)}'
+        }), 500
+
 # Debug helper: list registered routes (for troubleshooting only)
 @app.route('/api/_routes', methods=['GET'])
 def _routes():

@@ -17,6 +17,8 @@ function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [sensorData, setSensorData] = useState(null);
+  const [sensorLoading, setSensorLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -99,6 +101,29 @@ function App() {
     }
   };
 
+  const fetchSensorData = async () => {
+    setSensorLoading(true);
+    setError('');
+
+    try {
+      const response = await axios.get('http://localhost:5000/api/sensor-data');
+      setSensorData(response.data.data);
+
+      // Populate form with sensor data
+      setFormData(prev => ({
+        ...prev,
+        temperature: response.data.data.temperature.toString(),
+        humidity: response.data.data.humidity.toString(),
+        rainfall: response.data.data.rain_value.toString()
+      }));
+    } catch (err) {
+      setError('Error fetching sensor data. Please check if backend and IoT device are running.');
+      console.error('Sensor API Error:', err);
+    } finally {
+      setSensorLoading(false);
+    }
+  };
+
   return (
     <div className="App">
       <div className="container">
@@ -117,15 +142,13 @@ function App() {
                   <div className="form-group">
                     <label htmlFor="N">Nitrogen (N) - ppm</label>
                     <input
-                      type="number"
+                      type="text"
                       id="N"
                       name="N"
                       value={formData.N}
                       onChange={handleChange}
                       placeholder="0-140"
-                      min="0"
-                      max="140"
-                      step="0.1"
+                      pattern="[0-9]*\.?[0-9]*"
                     />
                     <span className="input-hint">Range: 0-140 ppm</span>
                   </div>
@@ -133,15 +156,13 @@ function App() {
                   <div className="form-group">
                     <label htmlFor="P">Phosphorus (P) - ppm</label>
                     <input
-                      type="number"
+                      type="text"
                       id="P"
                       name="P"
                       value={formData.P}
                       onChange={handleChange}
                       placeholder="5-145"
-                      min="5"
-                      max="145"
-                      step="0.1"
+                      pattern="[0-9]*\.?[0-9]*"
                     />
                     <span className="input-hint">Range: 5-145 ppm</span>
                   </div>
@@ -149,15 +170,13 @@ function App() {
                   <div className="form-group">
                     <label htmlFor="K">Potassium (K) - ppm</label>
                     <input
-                      type="number"
+                      type="text"
                       id="K"
                       name="K"
                       value={formData.K}
                       onChange={handleChange}
                       placeholder="5-205"
-                      min="5"
-                      max="205"
-                      step="0.1"
+                      pattern="[0-9]*\.?[0-9]*"
                     />
                     <span className="input-hint">Range: 5-205 ppm</span>
                   </div>
@@ -165,15 +184,13 @@ function App() {
                   <div className="form-group">
                     <label htmlFor="temperature">Temperature - °C</label>
                     <input
-                      type="number"
+                      type="text"
                       id="temperature"
                       name="temperature"
                       value={formData.temperature}
                       onChange={handleChange}
                       placeholder="8-43"
-                      min="8"
-                      max="43"
-                      step="0.1"
+                      pattern="[0-9]*\.?[0-9]*"
                     />
                     <span className="input-hint">Range: 8-43°C</span>
                   </div>
@@ -181,15 +198,13 @@ function App() {
                   <div className="form-group">
                     <label htmlFor="humidity">Humidity - %</label>
                     <input
-                      type="number"
+                      type="text"
                       id="humidity"
                       name="humidity"
                       value={formData.humidity}
                       onChange={handleChange}
                       placeholder="14-100"
-                      min="14"
-                      max="100"
-                      step="0.1"
+                      pattern="[0-9]*\.?[0-9]*"
                     />
                     <span className="input-hint">Range: 14-100%</span>
                   </div>
@@ -197,15 +212,13 @@ function App() {
                   <div className="form-group">
                     <label htmlFor="ph">pH Level</label>
                     <input
-                      type="number"
+                      type="text"
                       id="ph"
                       name="ph"
                       value={formData.ph}
                       onChange={handleChange}
                       placeholder="3.5-9.5"
-                      min="3.5"
-                      max="9.5"
-                      step="0.1"
+                      pattern="[0-9]*\.?[0-9]*"
                     />
                     <span className="input-hint">Range: 3.5-9.5</span>
                   </div>
@@ -213,15 +226,13 @@ function App() {
                   <div className="form-group">
                     <label htmlFor="rainfall">Rainfall - mm</label>
                     <input
-                      type="number"
+                      type="text"
                       id="rainfall"
                       name="rainfall"
                       value={formData.rainfall}
                       onChange={handleChange}
                       placeholder="20-300"
-                      min="20"
-                      max="300"
-                      step="0.1"
+                      pattern="[0-9]*\.?[0-9]*"
                     />
                     <span className="input-hint">Range: 20-300mm</span>
                   </div>
@@ -236,7 +247,39 @@ function App() {
                 <button type="submit" className="submit-btn" disabled={loading}>
                   {loading ? '🔄 Getting Recommendation...' : '🌱 Get Crop Recommendation'}
                 </button>
+
+                <button type="button" className="sensor-btn" onClick={fetchSensorData} disabled={sensorLoading}>
+                  {sensorLoading ? '🔄 Fetching Sensor Data...' : '📡 Fetch Sensor Data'}
+                </button>
               </form>
+
+              {sensorData && (
+                <div className="sensor-data-display">
+                  <h3>📊 Current Sensor Data</h3>
+                  <div className="sensor-grid">
+                    <div className="sensor-item">
+                      <span className="sensor-label">Soil Moisture:</span>
+                      <span className="sensor-value">{sensorData.soil_moisture}</span>
+                    </div>
+                    <div className="sensor-item">
+                      <span className="sensor-label">Temperature:</span>
+                      <span className="sensor-value">{sensorData.temperature}°C</span>
+                    </div>
+                    <div className="sensor-item">
+                      <span className="sensor-label">Humidity:</span>
+                      <span className="sensor-value">{sensorData.humidity}%</span>
+                    </div>
+                    <div className="sensor-item">
+                      <span className="sensor-label">Rain Value:</span>
+                      <span className="sensor-value">{sensorData.rain_value}</span>
+                    </div>
+                    <div className="sensor-item">
+                      <span className="sensor-label">Timestamp:</span>
+                      <span className="sensor-value">{new Date(sensorData.timestamp).toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -252,7 +295,7 @@ function App() {
 
             {result && !loading && (
               <div className="card">
-                <h2>🎯 Recommended Crop</h2>
+                <h2> Recommended Crop</h2>
 
                 <div className="recommendation-result">
                   <div className="crop-name">
@@ -309,7 +352,7 @@ function App() {
 
                 {result.top_recommendations && result.top_recommendations.length > 1 && (
                   <div className="top-recommendations">
-                    <h3>🥈 Top 3 Recommendations</h3>
+                    <h3>Top 3 Recommendations</h3>
                     <div className="recommendations-list">
                       {result.top_recommendations.map((rec, index) => (
                         <div key={index} className="rec-item">

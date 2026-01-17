@@ -4,9 +4,11 @@
 
 An intelligent system that recommends the best crops for farmers based on soil nutrients and climate conditions using Machine Learning and Deep Learning models.
 
+> **🔌 IoT/Automation System Available!** This project now includes a complete IoT automation setup with Arduino UNO, sensors (Soil Moisture, DHT11/DHT22, Rain Sensor), and automated irrigation control. See the [`iot/`](./iot/) directory for complete documentation and Arduino code.
+
 ## 📋 Project Structure
 
-```
+````
 crop-recommendation-system/
 ├── backend/
 │   ├── crop_recommendation_model.ipynb  # ML/DL model training notebook
@@ -23,8 +25,10 @@ crop-recommendation-system/
 │   │   └── index.html                  # HTML template
 │   ├── package.json                    # Node dependencies
 │   └── README.md                       # Frontend documentation
-└── README.md                           # Project overview
-```
+├── iot/
+│   ├── crop_irrigation.ino             # Arduino UNO automation code
+│   ├── crop_irrigation_rpi.py          # Raspberry Pi automation script
+│   └── README_IOT.md                   # IoT setup and hardware guide
 
 ## 🌟 Features
 
@@ -92,7 +96,7 @@ crop-recommendation-system/
 
 ```bash
 cd crop-recommendation-system/backend
-```
+````
 
 2. Create virtual environment:
 
@@ -144,6 +148,94 @@ npm start
 ```
 
 The frontend will be available at `http://localhost:3000`
+
+## 🔌 IoT/Automation Setup
+
+The system includes a complete IoT automation module for real-time sensor monitoring and automated irrigation control.
+
+### Hardware Components
+
+- **Microcontroller**: Arduino UNO or Raspberry Pi
+- **Sensors**:
+  - Soil Moisture Sensor (analog/digital)
+  - DHT11/DHT22 Temperature & Humidity Sensor
+  - Rain Sensor (optional)
+- **Actuators**:
+  - Relay Module (for water pump control)
+  - 12V DC Water Pump
+- **Power**: Solar Panel + Battery (optional for sustainable operation)
+
+### IoT Features
+
+- **Automated Irrigation**: Smart watering based on soil moisture levels
+- **Weather Monitoring**: Real-time temperature, humidity, and rainfall detection
+- **Backend Integration**: Sensor data sent to Flask API for storage and analysis
+- **Threshold-based Control**: Configurable thresholds for different crops
+- **Solar Power Support**: Sustainable operation with solar panels
+
+### Quick IoT Setup
+
+1. **Hardware Assembly**:
+
+   ```bash
+   # See iot/README_IOT.md for detailed wiring diagrams
+   ```
+
+2. **Arduino Setup**:
+   - Install Arduino IDE
+   - Open `iot/crop_irrigation.ino`
+   - Upload to Arduino UNO
+
+3. **Raspberry Pi Setup**:
+
+   ```bash
+   cd iot/
+   pip3 install Adafruit_DHT RPi.GPIO requests
+   python3 crop_irrigation_rpi.py
+   ```
+
+4. **Backend Integration**:
+   - API endpoints added for sensor data
+   - Real-time monitoring via `/api/sensor-data`
+
+### IoT API Endpoints
+
+#### POST /api/sensor-data
+
+Send sensor readings from IoT devices.
+
+**Request:**
+
+```json
+{
+  "timestamp": "2024-01-01T12:00:00Z",
+  "soil_moisture": 450.5,
+  "temperature": 25.3,
+  "humidity": 65.2,
+  "rain_value": 300.0
+}
+```
+
+#### GET /api/sensor-data
+
+Retrieve latest sensor data.
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "timestamp": "2024-01-01T12:00:00Z",
+    "soil_moisture": 450.5,
+    "temperature": 25.3,
+    "humidity": 65.2,
+    "rain_value": 300.0
+  }
+}
+```
+
+For complete IoT documentation, setup guides, and troubleshooting, see [`iot/README_IOT.md`](./iot/README_IOT.md).
 
 ## 📡 API Endpoints
 
@@ -346,7 +438,7 @@ Output:
 - [ ] Historical data tracking
 - [ ] Crop disease detection
 - [ ] Market price integration
-- [ ] IoT sensor integration
+- [x] IoT sensor integration ✅
 
 ## 🤝 Contributing
 
@@ -402,6 +494,10 @@ crop-recommendation-system/
 │   │   └── index.html                  # HTML template
 │   ├── package.json                    # Node dependencies
 │   └── README.md                       # Frontend documentation
+├── iot/
+│   ├── automated_irrigation.ino        # Arduino code for irrigation system
+│   ├── README.md                        # IoT system documentation
+│   └── HARDWARE_SETUP.md               # Hardware setup guide
 └── README.md                           # Project overview
 ```
 
@@ -725,7 +821,7 @@ Output:
 - [ ] Historical data tracking
 - [ ] Crop disease detection
 - [ ] Market price integration
-- [ ] IoT sensor integration
+- [x] IoT sensor integration ✅
 
 ## 🤝 Contributing
 
